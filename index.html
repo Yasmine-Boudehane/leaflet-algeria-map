@@ -1,142 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <title>Algerian map</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-      crossorigin=""
-    />
-    <style>
-      #map {
-        height: 900px;
-      }
-
-      /* Only the necessary CSS shown */
-      :root {
-        --map-tiles-filter: brightness(0.6) invert(1) contrast(3)
-          hue-rotate(200deg) saturate(0.3) brightness(0.7);
-      }
-
-      .map-tiles {
-        filter: var(--map-tiles-filter, none);
-      }
-    </style>
-  </head>
-
-  <body>
-    <div id="map"></div>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
-      integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <script
-      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-      integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-      crossorigin=""
-    ></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+        integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet-easyprint@2.1.9/dist/bundle.min.js"></script>
-    <link
-      href="https://cdn.jsdelivr.net/npm/leaflet-easyprint@2.1.9/libs/leaflet.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/leaflet-easyprint@2.1.9/libs/leaflet.min.css" rel="stylesheet" />
+    <style>
+        #map {
+            height: 900px;
+        }
+
+        /* Only the necessary CSS shown */
+        :root {
+            --map-tiles-filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+        }
+
+        .map-tiles {
+            filter: var(--map-tiles-filter, none);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
     <script>
-      //Init BaseMaps
-      var basemaps = {
-        OpenStreetMaps: L.tileLayer(
-          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-          {
-            minZoom: 2,
-            maxZoom: 19,
-            id: "osm.streets",
-          }
-        ),
-        OpenStreetMaps_dark: L.tileLayer(
-          "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
-          {
-            attribution:
-              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            className: "map-tiles",
-          }
-        ),
-        "Google-Map": L.tileLayer(
-          "https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}",
-          {
-            minZoom: 2,
-            maxZoom: 19,
-            id: "google.street",
-          }
-        ),
-        "Google-Satellite": L.tileLayer(
-          "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
-          {
-            minZoom: 2,
-            maxZoom: 19,
-            id: "google.satellite",
-          }
-        ),
-        "Google-Hybrid": L.tileLayer(
-          "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
-          {
-            minZoom: 2,
-            maxZoom: 19,
-            id: "google.hybrid",
-          }
-        ),
-      };
-      var map = L.map("map", {
-        attributionControl: false,
-        center: [28.285033, 1.911621],
-        zoom: 6,
-        layers: [basemaps.OpenStreetMaps],
-      });
-      L.control.layers(basemaps).addTo(map);
-
-      //add print control to map
-      printer = L.easyPrint({
-        tileLayer: basemaps,
-        sizeModes: ["Current"],
-        sizeModes: ["Current", "A4Landscape", "A4Portrait"],
-        filename: "Algerian map",
-        exportOnly: true,
-        hideClasses: ["leaflet-control-easyPrint"],
-        hideControlContainer: true,
-        customWindowTitle: "Algerian map",
-      }).addTo(map);
-
-      // loading GeoJSON file -
-      $.getJSON("geojson/wilayas.geojson", function (data) {
-        // L.geoJson function is used to parse geojson file and load on to map
-        layer_wilaya = L.geoJSON(data, {
-          style: function (feature) {
-            return {
-              weight: 2,
-              fillOpacity: 0.8,
-              fillColor: "lightgray",
-              color: "black",
-            };
-          },
-          onEachFeature: function (feature, featureLayer) {
-            featureLayer.on("mouseover", function () {
-              this.setStyle({
-                fillOpacity: 0.5,
-              });
-            });
-            featureLayer.on("mouseout", function () {
-              layer_wilaya.resetStyle(this);
-            });
-            featureLayer.bindTooltip(feature.properties.name, {
-              className: "leaflet-tooltip-own",
-              direction: "top",
-            });
-          },
+        //Init BaseMaps
+        var basemaps = {
+            "OpenStreetMaps": L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    minZoom: 2,
+                    maxZoom: 19,
+                    id: "osm.streets",
+                }
+            ),
+            "OpenStreetMaps_dark": L.tileLayer(
+                "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
+                    className: "map-tiles",
+                }
+            ),
+            "Google-Map": L.tileLayer(
+                "https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}", {
+                    minZoom: 2,
+                    maxZoom: 19,
+                    id: "google.street",
+                }
+            ),
+            "Google-Satellite": L.tileLayer(
+                "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", {
+                    minZoom: 2,
+                    maxZoom: 19,
+                    id: "google.satellite",
+                }
+            ),
+            "Google-Hybrid": L.tileLayer(
+                "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}", {
+                    minZoom: 2,
+                    maxZoom: 19,
+                    id: "google.hybrid",
+                }
+            ),
+        };
+        var map = L.map("map", {
+            attributionControl: false,
+            center: [28.285033, 1.911621],
+            zoom: 6,
+            layers: [basemaps.OpenStreetMaps],
         });
-        layer_wilaya.addTo(map);
-      });
+        L.control.layers(basemaps).addTo(map);
+
+        //add print control to map
+        printer = L.easyPrint({
+            tileLayer: basemaps,
+            sizeModes: ["Current"],
+            sizeModes: ["Current", "A4Landscape", "A4Portrait"],
+            filename: "Algerian map",
+            exportOnly: true,
+            hideClasses: ["leaflet-control-easyPrint"],
+            hideControlContainer: true,
+            customWindowTitle: "Algerian map",
+        }).addTo(map);
+
+        // loading GeoJSON file -
+        $.getJSON("geojson/wilayas.geojson", function (data) {
+            // L.geoJson function is used to parse geojson file and load on to map
+            layer_wilaya = L.geoJSON(data, {
+                style: function (feature) {
+                    return {
+                        weight: 2,
+                        fillOpacity: 0.8,
+                        fillColor: "lightgray",
+                        color: "black",
+                    };
+                },
+                onEachFeature: function (feature, featureLayer) {
+                    featureLayer.on("mouseover", function () {
+                        this.setStyle({
+                            fillOpacity: 0.5,
+                        });
+                    });
+                    featureLayer.on("mouseout", function () {
+                        layer_wilaya.resetStyle(this);
+                    });
+                    featureLayer.bindTooltip(feature.properties.name, {
+                        className: "leaflet-tooltip-own",
+                        direction: "top",
+                    });
+                },
+            });
+            layer_wilaya.addTo(map);
+        });
     </script>
-  </body>
+</body>
+
 </html>
