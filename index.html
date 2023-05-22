@@ -101,8 +101,8 @@
                     return {
                         weight: 2,
                         fillOpacity: 0.8,
-                        fillColor: 'gray',
-                        color: "white"
+                        fillColor: 'lightgray',
+                        color: "gray"
                     }
                 },
                 onEachFeature: function (feature, featureLayer) {
@@ -122,27 +122,7 @@
             });
             layer_wilaya.addTo(map);
         });
-        const set_wilaya_style = () => {
-            var colors = [];
-            var color = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0').toUpperCase();
-            while (colors.includes(color)) {
-                color = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0').toUpperCase();
-            }
-            if (colors.length <= 58)
-                colors.push(color)
-            if (colors.length > 58) {
-                localStorage.setItem('colors', JSON.stringify(colors))
-            }
-            var style;
-            style = {
-                color: "transparent",
-                weight: 1,
-                fillOpacity: 1,
-                fillColor: color,
-                color: "white"
-            }
-            return style;
-        }
+
     </script>
 </body>
 </html>
