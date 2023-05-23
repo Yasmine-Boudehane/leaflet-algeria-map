@@ -36,38 +36,33 @@
         //Init BaseMaps
         var basemaps = {
             OpenStreetMaps: L.tileLayer(
-                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                {
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                     minZoom: 2,
                     maxZoom: 19,
                     id: "osm.streets",
                 }
             ),
             OpenStreetMaps_dark: L.tileLayer(
-                "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
-                {
+                "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
                     className: "map-tiles",
                 }
             ),
             "Google-Map": L.tileLayer(
-                "https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}",
-                {
+                "https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}", {
                     minZoom: 2,
                     maxZoom: 19,
                     id: "google.street",
                 }
             ),
             "Google-Satellite": L.tileLayer(
-                "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
-                {
+                "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", {
                     minZoom: 2,
                     maxZoom: 19,
                     id: "google.satellite",
                 }
             ),
             "Google-Hybrid": L.tileLayer(
-                "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
-                {
+                "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}", {
                     minZoom: 2,
                     maxZoom: 19,
                     id: "google.hybrid",
@@ -166,10 +161,10 @@
 
                 return container;
             },
-            onRemove: function (map) { },
+            onRemove: function (map) {},
         });
         var control = new L.Control.Button();
-        control.addTo(map);      
+        control.addTo(map);
     </script>
 </body>
 
